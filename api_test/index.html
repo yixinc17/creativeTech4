@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rue Go Burger</title>
+</head>
+<body>
+    <button role="button" id="initTrigger">Hello</button>
+    <section id="cocktailSection"></section>
+    <section id="dogSection"></section>
+    <section id="nasaSection"></section>
+
+
+
+
+    <script>
+        let triggerButton = document.getElementById('initTrigger')
+        let cocktailSection = document.getElementById('cocktailSection')
+        let dogSection = document.getElementById('dogSection')
+        let nasaSection = document.getElementById('nasaSection')
+        const randomCocktailURL = "https://www.thecocktaildb.com/api/json/v1/1/random.php"
+        
+        const nasaDailyURL = "https://api.nasa.gov/planetary/apod"
+        const nasaAPIKey ="api_key=8ysD5cOkgztz3yAN4DGf83LNF9PpShSoa0gLjFuT"
+        const nasaDate = "date=2003-10-29"
+        //const randomDogURL = "https://dog.ceo/dog-api/documentation/random"
+        //console.log(triggerButton)
+        
+        // *******************************************************************************************************
+        // const fetchDogData = ()=>{
+        //     fetch(randomDogURL)
+        //         .then(payload=>payload.json())
+        //         .then(data => appendDogData(data))
+        // }
+
+        // const appendDogData = (data)=>{
+        //     const dogImg = data.messege[0]
+
+
+
+
+        //     const image = document.createElement('img')
+        //     image.src = dogImg
+        //     image.alt = "image of puppy" 
+        //     dogSection.appendChild(image)
+
+        // }
+
+
+
+
+
+        // ******************************************************************************************************
+        const fetchCocktailData = ()=>{
+            // console.log('fetching...')
+            fetch(randomCocktailURL)
+                .then(payload=>payload.json())
+                .then(data => appendCocktailData(data))
+        }
+
+        const appendCocktailData = (data)=>{
+            const firstDrink = data.drinks[0]
+            const drinkName = firstDrink.strDrink
+            const drinkImg = firstDrink.strDrinkThumb
+
+            // console.log()
+
+            const nameHeader = document.createElement('h3')
+            nameHeader.innerText = drinkName
+            cocktailSection.appendChild(nameHeader)
+
+            const image = document.createElement('img')
+            image.src = drinkImg
+            image.alt = "image of" + drinkName
+            cocktailSection.appendChild(image)
+
+            fetchNASAData()
+        }
+        
+        // *****************************************************************************************************
+        const fetchNASAData = ()=>{
+            const fetchURL = nasaDailyURL+"?"+nasaAPIKey+"&"+nasaDate
+            fetch(fetchURL)
+                .then(payload=>payload.json())
+                .then(data => appendNASAData(data))
+        }
+
+        const appendNASAData = (data)=>{
+            console.log(data)
+
+            const picTitle = data.picTitle
+            const imgURL = data.imgURL
+            const picHeader = document.createElement('h3')
+            picHeader.innerText = picTitle
+            nasaSection.appendChild(picHeader)
+        
+            const nasaImg =  document.createElement('img')
+            nasaImg.src = imgURL
+            nasaImg.alt = "image of" + picTitle
+            nasaSection.appendChild(nasaImg)
+        }
+        
+        // ****************************************************************************************************
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+
+        triggerButton.addEventListener("click",fetchCocktailData)
+        // triggerButton.addEventListener("click",fetchDogData)
+    </script>
+</body>
+</html>
