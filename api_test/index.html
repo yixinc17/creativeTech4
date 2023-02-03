@@ -11,11 +11,42 @@
     <section id="cocktailSection"></section>
     <section id="dogSection"></section>
     <section id="nasaSection"></section>
-
+    <div>
+        <!-- <label for="uuid-input">Minecraft UUID:</label>
+        <input type="text" id="uuid-input"> -->
+        <button id="fetch-button">Fetch Avatar</button>
+    </div>
+    <div id="avatar"></div>
 
 
 
     <script>
+        //*********************************************************************************************************
+        //const uuidInput = document.querySelector("#uuid-input");
+        const fetchButton = document.querySelector("#fetch-button");
+        const avatarContainer = document.querySelector("#avatar");
+        
+        fetchButton.addEventListener("click", () => {
+            //const uuid = uuidInput.value;
+            fetch("https://crafatar.com/renders/head/df3346f4-475a-4a1c-8128-05eb03995b65?size=100&default=MHF_Steve&overlay")
+            .then(response => {
+                if (!response.ok) {
+                throw new Error("Failed to fetch the avatar");
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(blob);
+                img.alt = "Minecraft Avatar";
+                avatarContainer.appendChild(img);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        });
+
+    //****************************************************************************************************
         let triggerButton = document.getElementById('initTrigger')
         let cocktailSection = document.getElementById('cocktailSection')
         let dogSection = document.getElementById('dogSection')
@@ -25,28 +56,32 @@
         const nasaDailyURL = "https://api.nasa.gov/planetary/apod"
         const nasaAPIKey ="api_key=8ysD5cOkgztz3yAN4DGf83LNF9PpShSoa0gLjFuT"
         const nasaDate = "date=2003-10-29"
-        //const randomDogURL = "https://dog.ceo/dog-api/documentation/random"
+        const randomDogURL = "https://dog.ceo/api/breed/hound/afghan/images/random"
+        const disneyURL = "https://api.disneyapi.dev/characters"
         //console.log(triggerButton)
         
         // *******************************************************************************************************
-        // const fetchDogData = ()=>{
-        //     fetch(randomDogURL)
-        //         .then(payload=>payload.json())
-        //         .then(data => appendDogData(data))
-        // }
+        const fetchDogData = ()=>{
+            fetch(randomDogURL)
+                .then(payload => payload.json())
+                .then(data => appendDogData(data))
+        }
 
-        // const appendDogData = (data)=>{
-        //     const dogImg = data.messege[0]
+        const appendDogData = (data)=>{
+            const dogImg = data.message
+            const status = data.status
+            console.log(status)
 
 
 
 
-        //     const image = document.createElement('img')
-        //     image.src = dogImg
-        //     image.alt = "image of puppy" 
-        //     dogSection.appendChild(image)
+            const image = document.createElement('img')
+            image.src = dogImg
+            image.alt = "image of puppy" 
+            dogSection.appendChild(image)
 
-        // }
+            fetchCocktailData()
+        }
 
 
 
@@ -116,7 +151,7 @@
         
         
 
-        triggerButton.addEventListener("click",fetchCocktailData)
+        triggerButton.addEventListener("click",fetchDogData)
         // triggerButton.addEventListener("click",fetchDogData)
     </script>
 </body>
