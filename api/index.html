@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rue Go Burger</title>
+    <title>Pollen Treat</title>
     <style>
         #pollenSection{
             transform: rotate(-90deg) translate(800px, 300px);
@@ -14,9 +14,7 @@
             margin-top: -10px;
             margin-bottom: -10px;
             background-color: rgba(0,0,0,50%);
-            padding: 10px;
-            
-
+            padding: 10px;           
         }
         button {
             border: none;
@@ -27,20 +25,16 @@
             display: inline-block;
             font-size: 16px;
             margin: 4px 2px;
-            cursor: pointer;
-            
+            cursor: pointer;           
         }
         body {
             background-image: url("bg.gif");
             background-size: cover;
             background-attachment: fixed;
-
         }
         .bigdiv{
-            height: 300px;
-            
+            height: 300px;    
         }
-
     </style>
 </head>
 <body>
@@ -49,11 +43,10 @@
         <h1>If you are allergic to pollen, then be aware!!!</h1>
         <div><button role="button" id="current">current location</button></div>
         <div><button role="button" id="random">random location</button></div>
-        
         <div><button role="button" id="initTrigger">To see if plants are in pollen season</button></div>
         <div><button role="button" id="lang" style="font-size: 10px;padding:10px 20px;">change language</button></div>
     </div>
-    
+
     <section id="pollenSection"></section>
     <h1>This is a gift for you depending on the severity of the pollen!!!</h1>
     <section id="dogSection"></section>
@@ -61,8 +54,6 @@
     <audio id="sneezeSound" loop>
         <source src="audio/sneeze.wav" type="audio/wav">
     </audio>
-
-    
 
     <script>
         var lang = "en"
@@ -80,8 +71,7 @@
         const nasaDate = "date=2003-12-21"
         
 
-//****************************************************************************************************************
-//random language
+        //random language****************************************************************************************************************
         var langlist = ["en", "fr", "de", "es", "nl","it", "ko", "ru", "hi", "ja","ms-SG"];
 
         function getRandomString(langlist) {
@@ -90,8 +80,7 @@
             return langlist[index];
         }
         
-//**********************************************************************************************************
-//random location
+        //random location**********************************************************************************************************
         function getRandomLocation() {
             var lat = (Math.random() * 180 - 90).toFixed(7);
             var lng = (Math.random() * 360 - 180).toFixed(7);
@@ -100,7 +89,7 @@
         
         }
         
-//*******************************************************************************************************************
+        //RANDOM LANGUAGE, RANDOM LOCATION, CURRENT LOCATION BUTTONS*******************************************************************************************************************
         document.getElementById("lang").addEventListener("click",function(){
             const language = getRandomString(langlist);
             lang = language;
@@ -134,10 +123,6 @@
             }
         })
 
-
-
-
-
         let triggerButton = document.getElementById('initTrigger')
 
         let pollenSection = document.getElementById('pollenSection')
@@ -146,12 +131,12 @@
         const pollenDailyURL = "https://api.breezometer.com/pollen/v2/forecast/daily"
         const pollenLat = "lat="
         const pollenLon = "lon="
-        const pollenAPIKey ="key=6995c8441df0468fbfabb7a7661edb8d"
+        const pollenAPIKey ="key=2f344624ef934de09a1e964387644291"
         const pollenFeatures = "features=plants_information"
         const pollenDays = "days=3"
         
-        //console.log(triggerButton)
-        // *****************************************************************************************************
+        
+// POLLEN DATA*****************************************************************************************************
         const fetchPollenData = ()=>{
             const fetchURL = pollenDailyURL+"?" + pollenLat + latitude + "&" + pollenLon + longitude+ "&" + pollenAPIKey+"&"+pollenFeatures+"&"+pollenDays+"&lang="+lang
             fetch(fetchURL)
@@ -171,12 +156,9 @@
             for (var i in pollen){
                 name = pollen[i].display_name
                 status = pollen[i].in_season
-                //color = pollen[i].index.color
                 console.log(status)
                 console.log(pollen[i])
                 const plantName =  document.createElement('p')
-                // plantName.style.transform = "rotate(90deg)"
-                // plantName.style.position = "relative"
                 plantName.innerText = name
                 
                 
@@ -194,7 +176,7 @@
                 pollenSection.appendChild(plantName)
                 
                 //console.log(plantName.style.color,plantName.style.fontSize)
-// *************************************************************************************************************
+        // SNEEZE REACTION*************************************************************************************************************
         // play sneeze sounds multiple times    
                 for (var i = 0; i < sneeze; i++) {
                     
@@ -203,35 +185,20 @@
                     console.log(i)
                     setTimeout(function() {
                             // Do nothing, just wait for 1 second
-                    }, 1000);
-                    
-                }
-                
-        // ********************************************************************************************************************
-                
+                    }, 1000);                    
+                }                
             }
-            if(sneeze<2){
+            if(sneeze<3){
                     fetchDogData()
                 }else{
                     fetchNASAData()
                 }
-            
-            // const picTitle = data.title
-            // const imgURL = data.url
-            // const picHeader = document.createElement('h3')
-            // picHeader.innerText = picTitle
-            // nasaSection.appendChild(picHeader)
-        
-            // const nasaImg =  document.createElement('img')
-            // nasaImg.src = imgURL
-            // nasaImg.alt = "image of" + picTitle
-            // pollenSection.appendChild(nasaImg)
         }
         
-        // ****************************************************************************************************
+// ****************************************************************************************************
         
         triggerButton.addEventListener("click",fetchPollenData)
-        // *******************************************************************************************************
+//DOG DATA *******************************************************************************************************
         const fetchDogData = ()=>{
             fetch(randomDogURL)
                 .then(payload => payload.json())
@@ -242,26 +209,13 @@
             const dogImg = data.message
             const status = data.status
             console.log(status)
-
-
-
-
             const image = document.createElement('img')
             image.src = dogImg
             image.alt = "image of puppy" 
-            dogSection.appendChild(image)
-
-            
+            dogSection.appendChild(image)            
         }
 
-
-
-
-
-        // ******************************************************************************************************
-
-
-        // *****************************************************************************************************
+//NASA DATA *****************************************************************************************************
         const fetchNASAData = ()=>{
             const fetchURL = nasaDailyURL+"?"+nasaAPIKey+"&"+nasaDate
             fetch(fetchURL)
@@ -284,9 +238,8 @@
             nasaSection.appendChild(nasaImg)
         }
         
-        // ****************************************************************************************************
-        
-        // triggerButton.addEventListener("click",fetchDogData)
+// ****************************************************************************************************
+
     </script>
 </body>
 </html>
