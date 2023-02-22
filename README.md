@@ -16,7 +16,7 @@ This project is a variation of  [Rube Goldberg's fascination](https://en.wikiped
 
 Eventually, I picked three useable and informative APIs to participate in this Rube Goldberg's game. [Pollen API from BreezoMeter](https://docs.breezometer.com/api-documentation/pollen-api/v2/#features)(limited trial period), [NASA Open API](https://api.nasa.gov/), [Dog API](https://dog.ceo/dog-api/).
 
-![newDiagram](image\newDiagram.png)
+![newDiagram](image/newDiagram.png)
 
 ## Code
 
@@ -26,7 +26,7 @@ Eventually, I picked three useable and informative APIs to participate in this R
 
 For Pollen data, the json file contains information including: date, whether the location is in pollen season, tree types and information(name, color, in_season status, etc.) 
 
-![3](image\3.png)
+![3](image/3.png)
 
 I was trying to fetch name and in_season status data from the pollen API.
 
@@ -178,11 +178,11 @@ By using the function: navigator.geolocation.getCurrentPosition()
 
 Asking for permission:
 
-![5](image\5.png)
+![5](image/5.png)
 
 Current location:
 
-![6](image\6.png)
+![6](image/6.png)
 
 
 
@@ -200,7 +200,7 @@ Current location:
 
 However, this option will usually result in errors, because not every location has a corresponding data in this API.
 
-![4](image\4.png)
+![4](image/4.png)
 
 
 
@@ -306,9 +306,9 @@ The times of sneeze sounds(==pollen index) will affect the treat outputs.
                 }
 ```
 
-![7](image\7.png)
+![7](image/7.png)
 
-![8](image\8.png)
+![8](image/8.png)
 
 
 
@@ -318,13 +318,13 @@ The times of sneeze sounds(==pollen index) will affect the treat outputs.
 
 The original format of tree name information is a simply default layout.
 
-![original format](image\0.png)
+![original format](image/0.png)
 
 I was planning to make tree names form a forest-like layout, by rotating and size or color changing.
 
 Design:
 
-![Design](image\1.png)
+![Design](image/1.png)
 
 
 
@@ -336,7 +336,7 @@ Design:
 
 Output:
 
-![2](image\2.png)
+![2](image/2.png)
 
 ##### Background
 
@@ -348,5 +348,5 @@ Output:
         }
 ```
 
-![9](image\9.png)
+![9](image/9.png)
 
