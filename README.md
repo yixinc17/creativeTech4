@@ -2,7 +2,7 @@
 
 ## Brief
 
-You can try it with this link, but the API key might be expired already :(
+You can try it with [this link](https://yixinc17.github.io/creativeTech4/api), but the API key might be expired already :(
 
 [Video](https://youtu.be/LlPYXpyBlPg)
 
