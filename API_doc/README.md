@@ -3,6 +3,8 @@
 ## Brief
 
 You can try it with [this link](https://yixinc17.github.io/creativeTech4/API_doc/api), but the API key might be expired already :(
+or 
+you can folk this repsitory and downlod it, and apply your own trial API key(https://developers.breezometer.com/signup) to change the API key string in index.html(line 134)
 
 [Video](https://youtu.be/LlPYXpyBlPg)
 
