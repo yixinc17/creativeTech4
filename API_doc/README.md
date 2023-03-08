@@ -2,9 +2,11 @@
 
 ## Brief
 
-You can try it with [this link](https://yixinc17.github.io/creativeTech4/api), but the API key might be expired already :(
-
-[Video](https://youtu.be/LlPYXpyBlPg)
+You can try it with [this link](https://yixinc17.github.io/creativeTech4/API_doc/api), but the API key might be expired already :(
+or 
+you can folk this repsitory and downlod it, and apply your own trial API key(https://developers.breezometer.com/signup) to change the API key string in index.html(line 134) </br>
+[Test version](https://youtu.be/saZXtQJO2bM) </br>
+[Final Video](https://youtu.be/LlPYXpyBlPg)</br>
 
 This project is a variation of  [Rube Goldberg's fascination](https://en.wikipedia.org/wiki/Rube_Goldberg_machine) by using APIs to create an interactive website. Pollen treats is a websites that, on a click of a button, it will generate a special gift for you according to the pollen conditions at your current location.
 
