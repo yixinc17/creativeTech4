@@ -4,15 +4,17 @@
 
 Portals. To see the hidden space behind the wall, to teleport from one place to another. Try to make variations of interaction with the two portals.
 
+[Process Video](https://youtu.be/N1xAZ7knLsE)
+
 [MIRO board](https://miro.com/app/board/uXjVMeucDGQ=/)
 
 ## Process
 
 ### Teleports
 
-physical transport
+#### physical transport
 
-Prototype1
+##### Prototype1
 
 Teleport from 1 portal to another with updated location according to the other portal.
 
@@ -20,7 +22,7 @@ Teleport from 1 portal to another with updated location according to the other p
 
 <img src="image/02.png" alt="02" style="zoom:50%;" />
 
-Prototype2(from Tutorial)
+##### Prototype2(from Tutorial)
 
 [Tutorial source](https://www.youtube.com/watch?v=PkGjYig8avo)
 
@@ -30,15 +32,57 @@ Prototype2(from Tutorial)
 
 ![13](image/13.png)
 
+###### Basic understanding of scripts:
 
+**Attached to Player camera**
 
+`CameraMove.cs` is used to control the camera's position and rotation by Keys "AWSD" and the mouse.
 
+`PortalCamera.cs` is used to render the view through two portals with relative movement of camera angles.
 
+![0](image/0.jpg)
 
+```c#
+//rotate with camera, get mouse data
+		var rotation = new Vector2(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"));
+		
+// Move the camera, get key data
+        float x = Input.GetAxis("Horizontal");//ad
+        float z = Input.GetAxis("Vertical");//ws
+        moveVector = new Vector3(x, 0.0f, z) * moveSpeed;
+        moveY = Input.GetAxis("Elevation");//qe to move with height
+//other undefined key
+		Input.GetKey("G")
+//check Input names in Project settings-Input Manager
+
+```
+
+![001](image/001.png)
+
+`PortalPlacement.cs` is used for placing portals in a game environment. It requires a `CameraMove` component and a `PortalPair` object which contains the two portals that will be used in the game.
+
+```c#
+Input.GetButtonDown("Fire1")//Right mouse button
+Input.GetButtonDown("Fire2")//Right mouse button
+```
+
+`Crosshair.cs` is a script for managing the crosshair in a portal game. It is responsible for displaying which portals have been placed and their colors.
+
+`PlayerController.cs` defines a player controller class that inherits from a base class called `PortalableObject`.
+
+**Attached to Portals:**
+
+`PortalPair.cs` is attached to PortalPair group.
+
+`Portal.cs` is attached to each portal under PortalPair group.
+
+**Attached to Objects:**
+
+`PortalableObject.cs` is used for object that can be teleported and transformed between two portals. 
 
 ### Vision in Portal(Shaders)
 
-camera
+**camera**
 
 ![2](image/2.png)
 
@@ -51,6 +95,8 @@ The script: `PortalableObject.cs` is for `gameObject` to teleport from one porta
 In the script `PortalableObject.cs`:
 
 The `Awake()` method creates the `cloneObject` as a copy of the object being teleported, initializes its components with the same mesh and materials, and sets its scale to match that of the original object.
+
+Get components of current object and make a new cloneObject.
 
 ```c#
  protected virtual void Awake()
@@ -69,7 +115,7 @@ The `Awake()` method creates the `cloneObject` as a copy of the object being tel
     }
 ```
 
-
+update the cloneobject's parameters with reverse data to simulate going out of the other portal.
 
 ```c#
 private void LateUpdate()
@@ -102,7 +148,7 @@ private void LateUpdate()
     }
 ```
 
-
+give this object the new relative parameters.
 
 ```c#
 public virtual void Warp()
@@ -137,7 +183,7 @@ public virtual void Warp()
 
 The portal is not a physical hole, but a related camera view from another portal. So we have to disable the collider of the portal to let the object fall in it.
 
-![5](image/5.png)
+![5](image/50.png)
 
 The `SetIsInPortal()` method is called when the object enters a portal and sets the `inPortal` and `outPortal` references. It also ignores collisions between the object and the portal's wall using the `Physics.IgnoreCollision()` method.
 
@@ -277,15 +323,141 @@ public virtual void Warp()
     }
 ```
 
-method3: change to prefab/models
+###### method3: change to prefab/models
 
-method4:change to organic shapes with data.(get portal location)
+When throwing the portable object (sphere) into the portal, the portal will give back a hamburger.
+
+```c#
+// Instantiate the prefab.
+GameObject newObject = Instantiate(prefabToSpawn, transform.position, transform.rotation);
+newObject.transform.localScale = transform.localScale;
+```
+
+The hamburger will stuck in the surface of the portal.
+
+![92](image/92.png)
+
+So I made a slight displacement of the spawn hamburger.
+
+```c#
+    // Calculate the spawn position just outside the outPortal
+    float portalExitOffset = -1.0f; // Adjust this value based on the size of the prefab
+    Vector3 spawnPosition = outTransform.TransformPoint(relativePos) + outTransform.forward * portalExitOffset;
+    // Instantiate the prefab.
+    GameObject newObject = Instantiate(prefabToSpawn, spawnPosition, transform.rotation);
+    newObject.transform.localScale = transform.localScale;
+```
+
+However, the generated hamburgers do not have the functions to teleport between two portals, so the hamburgers are stuck in the virtual space in the portal.
+
+![91](image/91.png)
+
+###### method4:change to organic shapes with data.(get portal location)
+
+*Haven't finished yet.* When throwing the portable object (sphere) into the portal, the portal will give back a organic shape of object according to the portal data.
+
+##### switch on/off environment light
+
+Before entering: blue environment light
+
+![93](image/93.png)
+
+After entering: blue environment light shut down
+
+![94](image/94.png)
+
+```c#
+//version1
+//in LateUpdated()
+// Check if the object has entered the portal an even number of times
+        if (enterTimes % 2 == 0)
+        {
+            // Turn off the directional light
+            GameObject.FindGameObjectWithTag("DirectionalLight").SetActive(false);
+        }else
+        {
+            GameObject.FindGameObjectWithTag("DirectionalLight").SetActive(true);
+        }
+```
+
+However, with this script, the light only turn off when the object enters in the portal for the first time. So I print the "enterTimes" to see if the time counter works.
+
+```c#
+Debug.Log(enterTimes);
+```
+
+![7](image/70.png)
+
+The `enterTimes`works, but the switch on/off according to `enterTimes` doesn't work.
+
+```c#
+//version2
+//turn light on/off when it is off/on
+public void SetIsInPortal(Portal inPortal, Portal outPortal, Collider wallCollider)
+{
+    // Toggle the state of the directional light when entering the portal
+        GameObject directionalLight = GameObject.FindGameObjectWithTag("DirectionalLight");
+        bool currentLightState = directionalLight.activeSelf;
+        directionalLight.SetActive(!currentLightState);
+        Debug.Log(currentLightState);
+}
+//still only works for the first time
+```
+
+```c#
+//version3 only turn off once
+private void LateUpdate()
+    {        
+        if (hasEnteredPortal)
+        {
+        GameObject directionalLight = GameObject.FindGameObjectWithTag("DirectionalLight");
+        bool currentLightState = directionalLight.activeSelf;
+        directionalLight.SetActive(!currentLightState);
+        hasEnteredPortal = false;     
+        }        
+    }
+public void SetIsInPortal(Portal inPortal, Portal outPortal, Collider wallCollider)
+    {
+        //...
+        // Set hasEnteredPortal to true when the object enters the portal
+        hasEnteredPortal = true;
+	}
+```
 
 #### User Friendly
 
 ```c#
-  [SerializeField] public float scaleMultiplier = 3.0f;
-  [SerializeField] public Color changedColor = Color.red;
-  [SerializeField] private PrimitiveType primitiveType = PrimitiveType.Cube;
+[SerializeField] public float scaleMultiplier = 3.0f;
+[SerializeField] public Color changedColor = Color.red;
+[SerializeField] private PrimitiveType primitiveType = PrimitiveType.Cube;
+[SerializeField] private GameObject prefabToSpawn; 
 ```
 
+![80](image/80.png)
+
+```c#
+//turn on/off those variations
+[SerializeField] private bool changeColor = false;
+[SerializeField] private bool changeType = false;
+[SerializeField] private bool createNewPrefab = false;
+           
+//in LateUpdated() and Warp()
+		if(changeColor){
+            // Change color of clone.
+            GetComponent<MeshRenderer>().material.color = changedColor;
+        }
+        if(changeType){
+            // Destroy the previous mesh
+            Destroy(cloneObject.GetComponent<MeshFilter>().mesh);
+            // Create a new cube mesh and assign it to the clone object
+            Mesh cubeMesh = GameObject.CreatePrimitive(primitiveType).GetComponent<MeshFilter>().sharedMesh;
+            GetComponent<MeshFilter>().mesh = cubeMesh;
+        }
+        if(createNewPrefab){
+            // Instantiate the prefab.
+            GameObject newObject = Instantiate(prefabToSpawn, transform.position, transform.rotation);
+            newObject.transform.localScale = transform.localScale;
+        }
+```
+
+![81](image/81.png)
